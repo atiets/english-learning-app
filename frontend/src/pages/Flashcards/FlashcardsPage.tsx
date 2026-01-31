@@ -1,55 +1,28 @@
 import { useState } from "react";
-import FlashcardCard from "../../components/ui/FlashcardCard";
 import { Flashcard } from "../../types/flashcard";
+import CreateFlashcardForm from "../../components/ui/CreateFlashcardForm";
 
-const mockFlashcards: Flashcard[] = [
-    {
-        id: "1",
-        term: "Ebullient",
-        definition: "Cheerful and full of energy",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    },
-    {
-        id: "2",
-        term: "Laconic",
-        definition: "Using very few words",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    },
-    {
-        id: "3",
-        term: "Obfuscate",
-        definition: "To render obscure, unclear, or unintelligible",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    },
-]
 
 const FlashcardsPage = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
 
-    const nextCard = ()=> {
-        setCurrentIndex((prev) => (prev + 1) % mockFlashcards.length);
-    }
-
-    const prevCard = () => {
-        setCurrentIndex((prev) => prev === 0 ? mockFlashcards.length - 1 : prev - 1);
+    const addFlashcard = (flashcard: Flashcard) => {
+        setFlashcards((prev) => [...prev, flashcard]);
     }
 
     return (
-        <div className="max-w-md mx-auto p-4">
-            <FlashcardCard flashcard={mockFlashcards[currentIndex]} />
-            <div className="flex justify-between mt-4">
-                <button onClick={prevCard} className="border px-4 py-2 rounded">
-                    Prev
-                </button>
-                <button onClick={nextCard} className="border px-4 py-2 rounded">
-                    Next
-                </button>
-            </div>
+        <div className="max-w-md mx-auto p-4 space-y-4">
+            <CreateFlashcardForm onAdd={addFlashcard} />
+            <ul className="space-y-2">
+                {flashcards.map((flashcard) => (
+                    <li key={flashcard.id} className="border p-2 rounded">
+                        <strong>{flashcard.term}</strong>
+                        <p>{flashcard.definition}</p>
+                    </li>
+                ))}
+            </ul>
         </div>
-    )
+    );
 }
 
 export default FlashcardsPage;
