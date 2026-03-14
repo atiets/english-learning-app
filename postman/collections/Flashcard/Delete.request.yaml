@@ -1,0 +1,5 @@
+$kind: http-request
+name: Delete
+url: http://localhost:8000/api/flashcards/69b54004da7457118737884d
+method: DELETE
+order: 4499950671161987

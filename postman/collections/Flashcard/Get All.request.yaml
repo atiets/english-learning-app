@@ -1,5 +1,5 @@
 $kind: http-request
-name: Create
+name: Get All
 url: http://localhost:8000/api/flashcards
-method: POST
-order: 1773482182566
+method: GET
+order: 4417976855170612

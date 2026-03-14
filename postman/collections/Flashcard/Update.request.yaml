@@ -1,0 +1,12 @@
+$kind: http-request
+name: Update
+url: http://localhost:8000/api/flashcards/69b53faeda74571187378848
+method: PUT
+body:
+  type: json
+  content: |-
+    {
+      "word": "Ebullient",
+      "meaning": "Very cheerful!!"
+    }
+order: 4499203777996709
