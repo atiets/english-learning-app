@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get one
+url: http://localhost:8000/api/flashcards/69b53faeda74571187378848
+method: GET
+order: 4488793082195233
