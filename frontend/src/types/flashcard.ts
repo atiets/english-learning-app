@@ -1,7 +1,7 @@
 export type Flashcard = {
     id: string;
-    term: string;
-    definition: string;
+    word: string;
+    meaning: string;
     createdAt: Date;
     updatedAt: Date;
 }
