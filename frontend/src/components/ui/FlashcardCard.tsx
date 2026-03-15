@@ -18,7 +18,7 @@ const FlashcardCard = ({ flashcard}: FlashcardCardProps) => {
         className="border border-black rounded-xl text-center p-8 cursor-pointer bg-amber-50 hover:bg-amber-100 transition min-h-[160px] flex flex-col justify-center"
         >
         <p className="text-xl font-serif">
-            {isFlipped ? flashcard.definition : flashcard.term}
+            {isFlipped ? flashcard.word : flashcard.meaning}
         </p>
         <p className="text-xs text-gray-500 mt-4">
             Click to Flip

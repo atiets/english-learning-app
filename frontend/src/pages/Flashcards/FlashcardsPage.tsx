@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Flashcard } from "../../types/flashcard";
 import CreateFlashcardForm from "../../components/ui/CreateFlashcardForm";
 
-
 const FlashcardsPage = () => {
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
 
@@ -16,8 +15,8 @@ const FlashcardsPage = () => {
             <ul className="space-y-2">
                 {flashcards.map((flashcard) => (
                     <li key={flashcard.id} className="border p-2 rounded">
-                        <strong>{flashcard.term}</strong>
-                        <p>{flashcard.definition}</p>
+                        <strong>{flashcard.word}</strong>
+                        <p>{flashcard.meaning}</p>
                     </li>
                 ))}
             </ul>
