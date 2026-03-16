@@ -1,13 +1,12 @@
-import React from 'react';
+import  React from 'react';
 import MainLayout from './layouts/MainLayout';
-import FlashcardsPage from './pages/Flashcards/FlashcardsPage';
-import StudyFlashcardsPage from './pages/Flashcards/StudyFlashcardsPage';
+import AppRoutes from './routes';
 import './App.css';
 
 function App() {
   return (
     <MainLayout>
-      <StudyFlashcardsPage />
+      <AppRoutes />
     </MainLayout>
   );
 }
