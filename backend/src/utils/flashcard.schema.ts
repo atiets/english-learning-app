@@ -9,6 +9,6 @@ export const flashcardSchema = z.object({
     category: z.string().optional(),
     level: z.string().optional(),
     tags: z.array(z.string()).optional(),
-    userId: z.string(),
-    deskId: z.string(),
+    userId: z.string().optional(),
+    deskId: z.string().optional(),
 });
