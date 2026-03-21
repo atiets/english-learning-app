@@ -1,25 +1,65 @@
-import Flashcard from "../models/Flashcard.js";
+import { data } from "react-router-dom";
+import { supabase } from "../utils/supabase.js";
 
-export const createFlashcardService = async (data: any) => {
-    return await Flashcard.create(data);
+export const createFlashcardService = async(data: any) => {
+  const {data: result, error} = await supabase
+    .from("flashcards")
+    .insert([data])
+    .select()
+
+  if(error) throw error;
+  return result[0];
 }
 
-export const getFlashcardsService = async () => {
-    return await Flashcard.find();
+export const getFlashcardsService = async() => {
+  const {data, error} = await supabase
+    .from("flashcards")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if(error) throw error;
+  return data;
 }
 
-export const getFlashcardsByDeckIdService = async (deckId: string) => {
-  return Flashcard.find({ deckId });
-};
+export const getFlashcardsByDeckIdService = async(deckId: string) => {
+  const {data, error} = await supabase
+    .from("flashcards")
+    .select("*")
+    .eq("deckId", deckId)
+    .order("created_at", { ascending: false });
 
-export const getFlashcardByIdService = async (id: string) => {
-  return Flashcard.findById(id);
-};
+  if(error) throw error;
+  return data;
+}
 
-export const updateFlashcardService = async (id: string, data: any) => {
-  return Flashcard.findByIdAndUpdate(id, data, { new: true });
-};
+export const getFlashcardByIdService = async(id: string) => {
+  const {data, error} = await supabase
+    .from("flashcards")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-export const deleteFlashcardService = async (id: string) => {
-  return Flashcard.findByIdAndDelete(id);
-};
+  if(error) throw error;
+  return data;
+}
+
+export const updateFlashcardService = async(id: string, data: any) => {
+  const {data: result, error} = await supabase
+    .from("flashcards")
+    .update(data)
+    .eq("id", id)
+    .select();
+
+  if(error) throw error;
+  return result[0];
+}
+
+export const deleteFlashcardService = async(id: string) => {
+  const {error} = await supabase
+    .from("flashcards")
+    .delete()
+    .eq("id", id);
+
+  if(error) throw error;
+  return true;
+}
