@@ -1,13 +1,10 @@
 import  React from 'react';
-import MainLayout from './layouts/MainLayout';
 import AppRoutes from './routes';
 import './App.css';
 
 function App() {
   return (
-    <MainLayout>
-      <AppRoutes />
-    </MainLayout>
+    <AppRoutes />
   );
 }
 

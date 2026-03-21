@@ -1,10 +1,11 @@
-const MainLayout = ({children} : {children: React.ReactNode}) => {
+import Navbar from "../components/common/Navbar";
+import { Outlet } from "react-router-dom";
+
+const MainLayout = () => {
     return <div>
-        <header className="border-b border-black p-4 font-serif">
-            LitEnglish
-        </header>
-        <main className="p-4">
-            {children}
+        <Navbar />
+        <main className="p-6">
+            <Outlet />
         </main>
     </div>
 }
