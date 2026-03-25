@@ -7,10 +7,14 @@ const CreateFlashcardForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await createFlashcard({ word, meaning });
-
-    setWord("");
-    setMeaning("");
+    try {
+      await createFlashcard({ word, meaning });
+      alert("Flashcard created successfully");
+      setWord("");
+      setMeaning("");
+    } catch (error) {
+      alert("Failed to create flashcard");
+    }
   }
 
   return (
