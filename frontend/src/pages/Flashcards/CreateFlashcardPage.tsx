@@ -8,7 +8,7 @@ const CreateFlashcardPage = () => {
             </h1>
             <CreateFlashcardForm />
         </div>
-    );
+    );  
 };
 
 export default CreateFlashcardPage;
