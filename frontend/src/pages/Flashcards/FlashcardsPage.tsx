@@ -32,6 +32,8 @@ const FlashcardsPage = () => {
         loadFlashcards();
     }, []);
 
+    if (flashcards.length === 0) return;
+
     if (loading) {
         return (
             <div className="max-w-md mx-auto p-4">
@@ -83,6 +85,9 @@ const FlashcardsPage = () => {
     return (
         <div className="max-w-md mx-auto p-4">
             <FlashcardCard flashcard={flashcards[currentIndex]} />
+            <p className="text-center mt-4 text-sm border border-black inline-block px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                {currentIndex + 1} / {flashcards.length}
+            </p>
             <div className="flex justify-between mt-4">
                 <button onClick={prevCard} className="border px-4 py-2 rounded">
                     Prev
