@@ -20,7 +20,6 @@ const Navbar = () => {
           <Link to="/study" className="hover:underline">Study</Link>
 
           <Link to="/profile" className="hover:underline">Profile</Link>
-
         </div>
       </div>
     </nav>
