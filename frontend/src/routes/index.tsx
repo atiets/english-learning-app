@@ -4,6 +4,7 @@ import HomePage from "../pages/Home/HomePage";
 import FlashcardsPage from "../pages/Flashcards/FlashcardsPage";
 import CreateFlashcardForm from "../components/ui/CreateFlashcardForm";
 import MainLayout from "../layouts/MainLayout";
+import EditFlashcardPage from "../pages/Flashcards/EditFlashcardPage";
 
 const AppRoutes = () => {
     return (
@@ -15,6 +16,8 @@ const AppRoutes = () => {
                     <Route path="/flashcards" element={<FlashcardsPage />} />
 
                     <Route path="/flashcards/new" element={<CreateFlashcardForm />} />
+
+                    <Route path="/flashcards/edit/:id" element={<EditFlashcardPage />} />
                 </Route>
 
             </Routes>

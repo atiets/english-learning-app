@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import FlashcardCard from "../../components/ui/FlashcardCard";
 import { Flashcard } from "../../types/flashcard";
-import { getFlashcards } from "../../services/api";
+import { getFlashcards, deleteFlashcard } from "../../services/api";
 
 const FlashcardsPage = () => {
+    const navigate = useNavigate();
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -17,6 +19,20 @@ const FlashcardsPage = () => {
         setCurrentIndex((prev) => prev === 0 ? flashcards.length - 1 : prev - 1);
     }
 
+    const handleDelete = async () => {
+        try{
+            const currentCard = flashcards[currentIndex];
+            await deleteFlashcard(currentCard.id);
+            setFlashcards(flashcards.filter(f => f.id != currentCard.id));
+            setCurrentIndex(0);
+        } catch(error){
+            setError("Failed to delete flashcard");
+        }
+    }
+
+    const handleEdit = () => {
+        navigate(`/flashcards/edit/${flashcards[currentIndex].id}`);
+    }
 
     useEffect(() => {
         const loadFlashcards = async () => {
@@ -94,6 +110,12 @@ const FlashcardsPage = () => {
                 </button>
                 <button onClick={nextCard} className="border px-4 py-2 rounded">
                     Next
+                </button>
+                <button onClick={handleDelete} className="border px-4 py-2 rounded">
+                    Delete
+                </button>
+                <button onClick={handleEdit} className="border px-4 py-2 rounded">
+                    Edit
                 </button>
             </div>
         </div>
