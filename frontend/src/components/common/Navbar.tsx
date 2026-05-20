@@ -1,25 +1,67 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+const navItemStyle =
+  "px-4 py-2 rounded-full transition-all duration-200 border-2 border-transparent";
 
 const Navbar = () => {
   return (
-    <nav className="border-b-4 border-black bg-[#fef3c7] shadow-[0_6px_0_0_rgba(0,0,0,1)]">
+    <nav className="bg-primaryRed border-b-4 border-darkBorder shadow-md">
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
 
-        <h1 className="text-xl font-bold">📚 Lit English</h1>
+        <h1 className="text-2xl font-black text-beige tracking-wide">
+          📚 Lit English
+        </h1>
 
-        <div className="flex gap-6 text-sm font-semibold">
+        <div className="flex gap-3 flex-wrap">
 
-          <Link to="/" className="hover:underline">Home</Link>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `
+              ${navItemStyle}
+              ${
+                isActive
+                  ? "bg-Byellow text-Bblack border-darkBorder shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "text-beige hover:bg-white/10"
+              }
+              `
+            }
+          >
+            Home
+          </NavLink>
 
-          <Link to="/explore" className="hover:underline">Explore</Link>
+          <NavLink
+            to="/flashcards"
+            className={({ isActive }) =>
+              `
+              ${navItemStyle}
+              ${
+                isActive
+                  ? "bg-Byellow text-Bblack border-darkBorder shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "text-beige hover:bg-white/10"
+              }
+              `
+            }
+          >
+            Flashcards
+          </NavLink>
 
-          <Link to="/flashcards" className="hover:underline">Flashcards</Link>
-
-          <Link to="/flashcards/new" className="hover:underline">Create</Link>
-
-          <Link to="/study" className="hover:underline">Study</Link>
-
-          <Link to="/profile" className="hover:underline">Profile</Link>
+          <NavLink
+            to="/flashcards/new"
+            className={({ isActive }) =>
+              `
+              ${navItemStyle}
+              ${
+                isActive
+                  ? "bg-primaryGreen text-white border-darkBorder shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "text-beige hover:bg-white/10"
+              }
+              `
+            }
+          >
+            Create
+          </NavLink>
+          <NavLink to="/profile" className="hover:underline">Profile</NavLink>
         </div>
       </div>
     </nav>
