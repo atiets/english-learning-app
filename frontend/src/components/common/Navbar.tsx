@@ -61,6 +61,7 @@ const Navbar = () => {
           >
             Create
           </NavLink>
+          <NavLink to="/profile" className="hover:underline">Profile</NavLink>
         </div>
       </div>
     </nav>
