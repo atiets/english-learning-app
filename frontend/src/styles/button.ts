@@ -1,37 +1,80 @@
 export const primaryButton = `
   px-5
   py-2
-
   rounded-full
-
   border-2
   border-darkBorder
-
-  bg-accentYellow
-
+  bg-primaryGreen
+  text-white
   font-bold
-
-  shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-
+  shadow-[3px_3px_0px_0px_rgba(43,43,43,1)]
   transition-all
   duration-200
-
-  hover:translate-y-[2px]
+  hover:translate-y-[1px]
+  hover:shadow-[2px_2px_0px_0px_rgba(43,43,43,1)]
+  active:translate-y-[2px]
+  active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)]
+  cursor-pointer
+  select-none
 `;
 
 export const dangerButton = `
   px-5
   py-2
-
   rounded-full
-
   border-2
   border-darkBorder
-
   bg-primaryRed
   text-white
-
   font-bold
+  shadow-[3px_3px_0px_0px_rgba(43,43,43,1)]
+  transition-all
+  duration-200
+  hover:translate-y-[1px]
+  hover:shadow-[2px_2px_0px_0px_rgba(43,43,43,1)]
+  active:translate-y-[2px]
+  active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)]
+  cursor-pointer
+  select-none
+`;
 
-  shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
+export const secondaryButton = `
+  px-5
+  py-2
+  rounded-full
+  border-2
+  border-darkBorder
+  bg-white
+  text-textPrimary
+  font-bold
+  shadow-[3px_3px_0px_0px_rgba(43,43,43,1)]
+  transition-all
+  duration-200
+  hover:translate-y-[1px]
+  hover:shadow-[2px_2px_0px_0px_rgba(43,43,43,1)]
+  hover:bg-beige/10
+  active:translate-y-[2px]
+  active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)]
+  cursor-pointer
+  select-none
+`;
+
+export const accentButton = `
+  px-5
+  py-2
+  rounded-full
+  border-2
+  border-darkBorder
+  bg-accentYellow
+  text-textPrimary
+  font-bold
+  shadow-[3px_3px_0px_0px_rgba(43,43,43,1)]
+  transition-all
+  duration-200
+  hover:translate-y-[1px]
+  hover:shadow-[2px_2px_0px_0px_rgba(43,43,43,1)]
+  active:translate-y-[2px]
+  active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)]
+  cursor-pointer
+  select-none
 `;
