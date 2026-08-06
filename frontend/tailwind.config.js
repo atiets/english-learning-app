@@ -7,8 +7,8 @@ module.exports = {
         appBg: "#F3EEE1",
         cardBg: "#E8DFC9",
 
-        primaryRed: "#7C1918",
-        primaryGreen: "#4F6F52",
+        primaryRed: "#750700",
+        primaryGreen: "#133216",
 
         beige: "#F6E7C1",
 
