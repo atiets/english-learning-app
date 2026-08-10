@@ -1,13 +1,12 @@
 import PageContainer from "../../components/layouts/PageContainer";
 import CreateFlashcardForm from "../../components/ui/CreateFlashcardForm";
+import { PageHeader } from "../../components/ui/RetroUI";
 
-const CreateFlashcardPage = () => {
-  return (
-    <PageContainer>
-      <h1 className="text-xl font-bold mb-4">Create Flashcard</h1>
-      <CreateFlashcardForm />
-    </PageContainer>
-  );
-};
+const CreateFlashcardPage = () => (
+  <PageContainer>
+    <PageHeader index="03" eyebrow="Vocabulary records / new entry" title="Create flashcard" description="File one English word or phrase with a clear meaning. Both fields are required." />
+    <CreateFlashcardForm />
+  </PageContainer>
+);
 
 export default CreateFlashcardPage;
