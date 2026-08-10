@@ -4,22 +4,35 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        appBg: "#F3EEE1",
-        cardBg: "#E8DFC9",
-
-        primaryRed: "#750700",
-        primaryGreen: "#133216",
-
-        beige: "#F6E7C1",
-
-        darkBorder: "#2B2B2B",
-
-        textPrimary: "#1C1C1C",
-        textSoft: "#5F5F5F",
-
-        accentOrange: "#EE7842",
-        accentYellow: "#F9D949",
+        "paper-canvas": "var(--color-paper-canvas)",
+        "paper-structural": "var(--color-paper-structural)",
+        "paper-panel": "var(--color-paper-panel)",
+        "paper-card": "var(--color-paper-card)",
+        "paper-input": "var(--color-paper-input)",
+        forest: "var(--color-forest)",
+        "forest-deep": "var(--color-forest-deep)",
+        oxblood: "var(--color-oxblood)",
+        mustard: "var(--color-mustard)",
+        ink: "var(--color-ink)",
+        "ink-muted": "var(--color-ink-muted)",
+        "state-success": "var(--color-state-success)",
+        "state-warning": "var(--color-state-warning)",
+        "state-error": "var(--color-state-error)",
       },
+      fontFamily: {
+        editorial: ["Georgia", "Cambria", "Times New Roman", "serif"],
+        display: ["Impact", "Arial Narrow", "sans-serif"],
+        mono: ["SFMono-Regular", "Consolas", "Liberation Mono", "monospace"],
+        body: ["Arial", "Helvetica", "sans-serif"],
+      },
+      maxWidth: { page: "72rem", reading: "46rem" },
+      boxShadow: {
+        hard: "var(--shadow-hard)",
+        "hard-sm": "var(--shadow-hard-sm)",
+        "hard-lg": "var(--shadow-hard-lg)",
+      },
+      transitionDuration: { fast: "120ms", standard: "180ms" },
+      zIndex: { nav: "40", dialog: "80", overlay: "70" },
     },
   },
   plugins: [],

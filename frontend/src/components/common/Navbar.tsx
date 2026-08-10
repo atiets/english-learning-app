@@ -1,310 +1,212 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
+  Award,
+  BookOpen,
+  ChevronDown,
+  Flame,
   Home,
   Layers,
-  Plus,
-  Flame,
-  Award,
   Menu,
-  X,
-  ChevronDown,
+  Plus,
   Settings,
-  BookOpen,
-  Sparkles
+  Sparkles,
+  X,
 } from "lucide-react";
+
+const navLinks = [
+  { to: "/", label: "Home", icon: Home, end: true },
+  { to: "/flashcards", label: "Flashcards", icon: Layers, end: true },
+  { to: "/flashcards/new", label: "Create", icon: Plus, end: false },
+];
+
+const controlClass = "min-h-11 inline-flex items-center justify-center gap-2 border-2 border-ink bg-paper-input px-2.5 text-ink shadow-hard-sm font-mono text-xs font-extrabold uppercase tracking-wide transition-all duration-fast hover:bg-paper-structural active:translate-x-[3px] active:translate-y-[3px] active:shadow-none";
+const menuItemClass = "flex min-h-11 w-full items-center gap-2 border-2 border-transparent px-3 py-2 text-left font-mono text-xs font-bold text-ink transition-colors duration-fast hover:border-ink hover:bg-paper-structural focus-visible:border-ink";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openReadout, setOpenReadout] = useState<"streak" | "level" | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // Close dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsDropdownOpen(false);
+        setIsMobileMenuOpen(false);
+        setOpenReadout(null);
+      }
+    };
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
-  const navItemStyle =
-    "flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all duration-150 border-2 border-transparent select-none";
-
-  const getNavLinkClass = (isActive: boolean) => {
-    return `
-      ${navItemStyle}
-      ${
-        isActive
-          ? "bg-primaryRed text-white border-darkBorder shadow-[2px_2px_0px_0px_rgba(43,43,43,1)] translate-y-[1px]"
-          : "text-beige hover:text-white hover:border-darkBorder hover:bg-white/10"
-      }
-    `;
+  const closeDesktopPanels = () => {
+    setIsDropdownOpen(false);
+    setOpenReadout(null);
   };
+  const navigateFromProfile = (path: string) => {
+    navigate(path);
+    closeDesktopPanels();
+  };
+  const navLinkClass = ({ isActive }: { isActive: boolean }) => `nav-link${isActive ? " active" : ""}`;
 
   return (
-    <nav className="sticky top-0 z-50 bg-primaryGreen border-b-4 border-darkBorder shadow-[0_4px_0_0_rgba(43,43,43,1)] transition-all">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
-        {/* Left Section: Logo */}
-        <NavLink to="/" className="flex items-center gap-2.5 group">
-          <div className="bg-primaryRed text-white p-2 rounded-xl border-2 border-darkBorder shadow-[2px_2px_0px_0px_rgba(43,43,43,1)] group-hover:scale-105 group-hover:rotate-[-2deg] transition-all duration-200 flex items-center justify-center">
-            <BookOpen className="w-6 h-6 fill-white/10" />
-          </div>
-          <span className="text-xl md:text-2xl font-black text-white tracking-tight select-none">
-            Lit<span className="text-accentYellow group-hover:text-beige transition-colors duration-200">English</span>
-          </span>
+    <nav className="app-nav" aria-label="Primary navigation">
+      <div className="nav-inner !max-w-[90rem] !gap-3 xl:!gap-6">
+        <NavLink to="/" className="brand shrink-0" aria-label="LitEnglish home">
+          <span className="brand-mark" aria-hidden="true"><BookOpen size={24} /></span>
+          <span className="brand-copy"><strong>LitEnglish</strong><small>LANGUAGE LAB / LOCAL FILE</small></span>
         </NavLink>
 
-        {/* Middle Section: Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-2">
-          <NavLink to="/" className={({ isActive }) => getNavLinkClass(isActive)}>
-            <Home className="w-4 h-4" />
-            <span>Home</span>
-          </NavLink>
-
-          <NavLink to="/flashcards" className={({ isActive }) => getNavLinkClass(isActive)} end>
-            <Layers className="w-4 h-4" />
-            <span>Flashcards</span>
-          </NavLink>
-
-          <NavLink to="/flashcards/new" className={({ isActive }) => getNavLinkClass(isActive)}>
-            <Plus className="w-4 h-4 font-bold" />
-            <span>Create</span>
-          </NavLink>
+        <div className="hidden min-[821px]:flex items-center gap-1 xl:gap-2">
+          {navLinks.map(({ to, label, icon: Icon, end }) => (
+            <NavLink to={to} end={end} className={navLinkClass} key={to}>
+              <Icon size={17} aria-hidden="true" />
+              <span className="hidden xl:inline">{label}</span>
+            </NavLink>
+          ))}
         </div>
 
-        {/* Right Section: Stats & Profile */}
-        <div className="hidden md:flex items-center gap-4">
-          {/* Streak Badge */}
-          <div className="relative group">
-            <button className="flex items-center gap-1.5 bg-white hover:bg-orange-50 text-accentOrange px-3 py-1.5 rounded-xl border-2 border-darkBorder shadow-[2px_2px_0px_0px_rgba(43,43,43,1)] transition-all active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)] font-bold text-xs">
-              <Flame className="w-4 h-4 fill-accentOrange animate-pulse" />
-              <span>5 Days</span>
+        <div className="ml-auto hidden min-[821px]:flex items-center gap-2" aria-label="Demo learning status and profile">
+          <span className="font-mono text-[8px] font-bold tracking-[.12em] text-mustard">DEMO</span>
+
+          <div className="group relative">
+            <button
+              className={controlClass}
+              onClick={() => { setOpenReadout(openReadout === "streak" ? null : "streak"); setIsDropdownOpen(false); }}
+              aria-expanded={openReadout === "streak"}
+              aria-controls="streak-readout"
+              aria-label="Streak: 5 days, demo data"
+            >
+              <Flame className="fill-state-warning text-oxblood" size={18} aria-hidden="true" />
+              <span className="hidden 2xl:inline">5 Days</span><span className="2xl:hidden">5D</span>
             </button>
-            
-            {/* Popover */}
-            <div className="absolute right-0 mt-2 w-64 bg-white border-2 border-darkBorder rounded-2xl p-4 shadow-[4px_4px_0px_0px_rgba(43,43,43,1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 text-left">
-              <div className="flex items-center gap-1.5 text-accentOrange font-extrabold text-sm mb-1">
-                <Flame className="w-4 h-4 fill-accentOrange" />
-                <span>Streak Active!</span>
+            <div
+              id="streak-readout"
+              className={`${openReadout === "streak" ? "visible opacity-100" : "invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"} absolute right-0 top-full z-50 mt-2 w-72 border-2 border-ink bg-paper-panel text-left text-ink shadow-hard transition-opacity duration-fast`}
+            >
+              <div className="flex items-center justify-between border-b-2 border-ink bg-forest px-3 py-2 text-paper-panel">
+                <span className="flex items-center gap-2 font-mono text-xs font-extrabold uppercase"><Flame size={16} aria-hidden="true" />Streak Active!</span>
               </div>
-              <p className="text-xs text-textSoft leading-relaxed font-medium">
-                You have studied for <strong>5 days</strong> in a row! Learn or test a new card tomorrow to keep it going.
-              </p>
-              <div className="mt-3 flex justify-between items-center gap-1">
-                {["M", "T", "W", "T", "F", "S", "S"].map((day, idx) => (
-                  <div key={idx} className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] text-textSoft/80 font-black">{day}</span>
-                    <span className={`w-6 h-6 flex items-center justify-center text-xs font-black rounded-full border-2 ${
-                      idx < 5
-                        ? "bg-accentOrange text-white border-darkBorder"
-                        : "bg-beige/20 text-textSoft border-dashed border-darkBorder/40"
-                    }`}>
-                      {idx < 5 ? "✓" : ""}
-                    </span>
-                  </div>
-                ))}
+              <div className="p-4">
+                <p className="mb-3 text-sm leading-relaxed text-ink-muted">You have studied for <strong className="text-ink">5 days</strong> in a row! Learn or test a new card tomorrow to keep it going.</p>
+                <div className="grid grid-cols-7 gap-1" aria-label="Five of seven placeholder study days complete">
+                  {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+                    <div className="grid gap-1 text-center" key={`${day}-${index}`}>
+                      <span className="font-mono text-[10px] font-bold text-ink-muted">{day}</span>
+                      <span className={`grid h-7 place-items-center border-2 border-ink font-mono text-xs font-black ${index < 5 ? "bg-state-warning text-white" : "border-dashed bg-paper-structural text-ink-muted"}`}>{index < 5 ? "✓" : ""}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Level / XP Badge */}
-          <div className="relative group">
-            <button className="flex items-center gap-1.5 bg-white hover:bg-yellow-50 text-textPrimary px-3 py-1.5 rounded-xl border-2 border-darkBorder shadow-[2px_2px_0px_0px_rgba(43,43,43,1)] transition-all active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)] font-bold text-xs">
-              <Award className="w-4 h-4 text-accentOrange fill-accentYellow" />
+          <div className="group relative">
+            <button
+              className={controlClass}
+              onClick={() => { setOpenReadout(openReadout === "level" ? null : "level"); setIsDropdownOpen(false); }}
+              aria-expanded={openReadout === "level"}
+              aria-controls="level-readout"
+              aria-label="Level 2, 120 of 200 XP, demo data"
+            >
+              <Award className="fill-mustard text-oxblood" size={18} aria-hidden="true" />
               <span>Lv. 2</span>
             </button>
-
-            {/* Popover */}
-            <div className="absolute right-0 mt-2 w-64 bg-white border-2 border-darkBorder rounded-2xl p-4 shadow-[4px_4px_0px_0px_rgba(43,43,43,1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 text-left">
-              <div className="flex justify-between items-center text-textPrimary font-extrabold text-sm mb-1.5">
-                <span className="flex items-center gap-1">
-                  <Sparkles className="w-4 h-4 text-accentOrange fill-accentYellow" />
-                  Level 2 Scholar
-                </span>
-                <span className="text-xs font-bold text-primaryGreen">120/200 XP</span>
+            <div
+              id="level-readout"
+              className={`${openReadout === "level" ? "visible opacity-100" : "invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"} absolute right-0 top-full z-50 mt-2 w-72 border-2 border-ink bg-paper-panel text-left text-ink shadow-hard transition-opacity duration-fast`}
+            >
+              <div className="flex items-center justify-between border-b-2 border-ink bg-forest px-3 py-2 text-paper-panel">
+                <span className="flex items-center gap-2 font-mono text-xs font-extrabold uppercase"><Sparkles size={16} aria-hidden="true" />Level 2 Scholar</span>
               </div>
-              <div className="w-full bg-beige h-3.5 rounded-full border-2 border-darkBorder overflow-hidden relative shadow-inner">
-                <div className="bg-accentYellow h-full border-r-2 border-darkBorder rounded-l-full transition-all duration-500" style={{ width: "60%" }}></div>
+              <div className="p-4">
+                <div className="mb-2 flex justify-between font-mono text-xs font-extrabold"><span>Next level progress</span><span className="text-forest">120/200 XP</span></div>
+                <div className="segmented" role="progressbar" aria-label="Placeholder experience progress" aria-valuemin={0} aria-valuemax={200} aria-valuenow={120}>
+                  {Array.from({ length: 10 }, (_, index) => <span className={index < 6 ? "filled" : ""} key={index} />)}
+                </div>
+                <p className="mb-0 mt-3 text-sm leading-relaxed text-ink-muted">You're doing great! Earn <strong className="text-ink">80 XP</strong> more to level up. Write custom cards and practice to gain XP.</p>
               </div>
-              <p className="text-[10px] text-textSoft mt-2 leading-relaxed font-medium">
-                You're doing great! Earn <strong>80 XP</strong> more to level up. Write custom cards and practice to gain XP.
-              </p>
             </div>
           </div>
 
-          {/* Profile Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 bg-white hover:bg-beige/25 px-3 py-1.5 rounded-xl border-2 border-darkBorder shadow-[2px_2px_0px_0px_rgba(43,43,43,1)] transition-all active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)] font-bold text-xs text-textPrimary"
+              className={controlClass}
+              onClick={() => { setIsDropdownOpen(!isDropdownOpen); setOpenReadout(null); }}
+              aria-expanded={isDropdownOpen}
+              aria-controls="profile-menu"
+              aria-haspopup="menu"
             >
-              <div className="w-6 h-6 rounded-full bg-primaryRed text-white flex items-center justify-center font-black text-xs border border-darkBorder">
-                A
-              </div>
+              <span className="grid h-7 w-7 place-items-center border-2 border-ink bg-oxblood text-white" aria-hidden="true">A</span>
               <span>Atit</span>
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`} />
+              <ChevronDown className={`transition-transform duration-standard ${isDropdownOpen ? "rotate-180" : ""}`} size={15} aria-hidden="true" />
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white border-2 border-darkBorder rounded-2xl shadow-[4px_4px_0px_0px_rgba(43,43,43,1)] overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-100 text-left">
-                <div className="p-3 border-b-2 border-darkBorder bg-beige/20">
-                  <p className="font-black text-textPrimary text-sm">Atit S.</p>
-                  <p className="text-[10px] text-textSoft">atit@example.com</p>
+              <div id="profile-menu" className="absolute right-0 top-full z-50 mt-2 w-64 border-2 border-ink bg-paper-panel text-left text-ink shadow-hard">
+                <div className="border-b-2 border-ink bg-forest px-3 py-3 text-paper-panel">
+                  <div><p className="mb-1 font-editorial text-base font-bold">Atit S.</p><p className="mb-0 font-mono text-[11px] text-paper-structural">atit@example.com</p></div>
                 </div>
-                <div className="p-2 space-y-1">
-                  <button
-                    onClick={() => { navigate("/"); setIsDropdownOpen(false); }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-textPrimary hover:bg-beige/30 flex items-center gap-2 transition-colors"
-                  >
-                    <Home className="w-4 h-4 text-textSoft" />
-                    Dashboard
-                  </button>
-                  <button
-                    onClick={() => { navigate("/flashcards"); setIsDropdownOpen(false); }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-textPrimary hover:bg-beige/30 flex items-center gap-2 transition-colors"
-                  >
-                    <Layers className="w-4 h-4 text-textSoft" />
-                    My Flashcards
-                  </button>
-                  <button
-                    onClick={() => { navigate("/flashcards/new"); setIsDropdownOpen(false); }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-textPrimary hover:bg-beige/30 flex items-center gap-2 transition-colors"
-                  >
-                    <Plus className="w-4 h-4 text-textSoft" />
-                    Create Flashcard
-                  </button>
-                  <hr className="border-darkBorder my-1" />
-                  <button
-                    onClick={() => { alert("Settings page coming soon!"); setIsDropdownOpen(false); }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-textPrimary hover:bg-beige/30 flex items-center gap-2 transition-colors"
-                  >
-                    <Settings className="w-4 h-4 text-textSoft" />
-                    Settings
-                  </button>
+                <div className="p-2">
+                  <button className={menuItemClass} onClick={() => navigateFromProfile("/")}><Home size={17} aria-hidden="true" />Dashboard</button>
+                  <button className={menuItemClass} onClick={() => navigateFromProfile("/flashcards")}><Layers size={17} aria-hidden="true" />My Flashcards</button>
+                  <button className={menuItemClass} onClick={() => navigateFromProfile("/flashcards/new")}><Plus size={17} aria-hidden="true" />Create Flashcard</button>
+                  <hr className="my-2 border-0 border-t-2 border-dashed border-ink/50" />
+                  <button className={menuItemClass} onClick={() => { alert("Settings page coming soon!"); setIsDropdownOpen(false); }}><Settings size={17} aria-hidden="true" />Settings</button>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Hamburger Menu for Mobile */}
-        <div className="flex items-center md:hidden gap-2">
-          {/* Flame Icon Mobile (Shortcut) */}
-          <div className="flex items-center gap-1 bg-white text-accentOrange px-2 py-1 rounded-lg border border-darkBorder font-extrabold text-xs">
-            <Flame className="w-3.5 h-3.5 fill-accentOrange" />
-            <span>5</span>
+        <div className="ml-auto flex items-center gap-2 min-[821px]:hidden">
+          <div className="flex min-h-11 items-center gap-1.5 border-2 border-ink bg-paper-input px-2.5 font-mono text-xs font-extrabold text-oxblood" aria-label="Demo streak: 5 days">
+            <Flame className="fill-state-warning" size={18} aria-hidden="true" /><span>5</span>
           </div>
-
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 rounded-xl border-2 border-darkBorder bg-white shadow-[2px_2px_0px_0px_rgba(43,43,43,1)] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(43,43,43,1)] transition-all flex items-center justify-center text-textPrimary"
-          >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <button className="mobile-toggle !ml-0" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-expanded={isMobileMenuOpen} aria-controls="mobile-nav" aria-label={isMobileMenuOpen ? "Close navigation" : "Open navigation"}>
+            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Panel */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t-2 border-darkBorder bg-white/95 backdrop-blur-md py-4 px-4 space-y-4 shadow-inner text-left animate-in slide-in-from-top duration-200">
-          <div className="flex flex-col gap-2">
-            <NavLink
-              to="/"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-bold border-2 ${
-                  isActive
-                    ? "bg-primaryRed border-darkBorder text-white shadow-[2px_2px_0px_0px_rgba(43,43,43,1)]"
-                    : "border-transparent text-textSoft hover:bg-beige/20 hover:text-textPrimary"
-                }`
-              }
-            >
-              <Home className="w-5 h-5" />
-              <span>Dashboard / Home</span>
-            </NavLink>
-
-            <NavLink
-              to="/flashcards"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-bold border-2 ${
-                  isActive
-                    ? "bg-primaryRed border-darkBorder text-white shadow-[2px_2px_0px_0px_rgba(43,43,43,1)]"
-                    : "border-transparent text-textSoft hover:bg-beige/20 hover:text-textPrimary"
-                }`
-              }
-              end
-            >
-              <Layers className="w-5 h-5" />
-              <span>My Flashcards</span>
-            </NavLink>
-
-            <NavLink
-              to="/flashcards/new"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-bold border-2 ${
-                  isActive
-                    ? "bg-primaryRed border-darkBorder text-white shadow-[2px_2px_0px_0px_rgba(43,43,43,1)]"
-                    : "border-transparent text-textSoft hover:bg-beige/20 hover:text-textPrimary"
-                }`
-              }
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create Flashcard</span>
-            </NavLink>
+        <div className="mobile-panel" id="mobile-nav">
+          <div className="grid gap-2">
+            {navLinks.map(({ to, label, icon: Icon, end }) => (
+              <NavLink to={to} end={end} className={navLinkClass} key={to} onClick={() => setIsMobileMenuOpen(false)}>
+                <Icon size={19} aria-hidden="true" />{label === "Home" ? "Dashboard / Home" : label === "Flashcards" ? "My Flashcards" : "Create Flashcard"}
+              </NavLink>
+            ))}
           </div>
-
-          <hr className="border-darkBorder" />
-
-          {/* Stats Summary in Mobile Menu */}
-          <div className="p-3 bg-beige/20 border-2 border-darkBorder rounded-2xl space-y-3">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-primaryRed text-white flex items-center justify-center font-bold border border-darkBorder">
-                  A
-                </div>
-                <div>
-                  <p className="font-black text-xs text-textPrimary">Atit S.</p>
-                  <p className="text-[10px] text-textSoft">Level 2 Scholar</p>
-                </div>
+          <div className="border-2 border-ink bg-paper-structural p-3 text-ink shadow-hard-sm">
+            <div className="flex items-center justify-between gap-3 border-b-2 border-dashed border-ink/50 pb-3">
+              <div className="flex min-w-0 items-center gap-2">
+                <span className="grid h-10 w-10 shrink-0 place-items-center border-2 border-ink bg-oxblood font-mono font-black text-white">A</span>
+                <div className="min-w-0"><p className="mb-0 font-editorial text-base font-bold">Atit S.</p><p className="mb-0 truncate font-mono text-[11px] text-ink-muted">Level 2 Scholar</p></div>
               </div>
-              <span className="text-2xs font-extrabold bg-accentYellow border border-darkBorder px-2 py-0.5 rounded-md">
-                120 XP
-              </span>
+              <span className="border border-ink bg-mustard px-2 py-1 font-mono text-[10px] font-black">DEMO / 120 XP</span>
             </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between text-[10px] font-bold text-textSoft">
-                <span>Next level progress</span>
-                <span>60%</span>
-              </div>
-              <div className="w-full bg-white h-2.5 rounded-full border border-darkBorder overflow-hidden">
-                <div className="bg-accentYellow h-full border-r border-darkBorder rounded-l-full" style={{ width: "60%" }}></div>
+            <div className="py-3">
+              <div className="mb-2 flex justify-between gap-2 font-mono text-xs font-bold"><span>Next level progress</span><span>60%</span></div>
+              <div className="segmented" role="progressbar" aria-label="Placeholder next level progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={60}>
+                {Array.from({ length: 10 }, (_, index) => <span className={index < 6 ? "filled" : ""} key={index} />)}
               </div>
             </div>
-
-            <div className="flex gap-2">
-              <div className="flex-1 flex items-center justify-center gap-1.5 bg-orange-50 border border-darkBorder py-2 rounded-xl text-xs font-black text-accentOrange">
-                <Flame className="w-4 h-4 fill-accentOrange" />
-                <span>5-Day Streak</span>
-              </div>
-              <button
-                onClick={() => {
-                  alert("Settings coming soon!");
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex items-center justify-center gap-1.5 bg-white border border-darkBorder hover:bg-beige/20 py-2 px-3 rounded-xl text-xs font-bold text-textSoft"
-              >
-                <Settings className="w-4 h-4" />
-                <span>Settings</span>
-              </button>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="flex min-h-11 items-center justify-center gap-2 border-2 border-ink bg-paper-input px-2 font-mono text-xs font-black text-oxblood"><Flame className="fill-state-warning" size={18} aria-hidden="true" />5-Day Streak</div>
+              <button className={`${menuItemClass} justify-center border-ink bg-paper-input`} onClick={() => { alert("Settings coming soon!"); setIsMobileMenuOpen(false); }}><Settings size={17} aria-hidden="true" />Settings</button>
             </div>
           </div>
         </div>
