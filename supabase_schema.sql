@@ -87,3 +87,34 @@ CREATE POLICY "Allow public update" ON public.flashcards
 
 CREATE POLICY "Allow public delete" ON public.flashcards
     FOR DELETE USING (true);
+
+
+-- Create profiles table for user information
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  username TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable Row Level Security
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- Users can view their own profile
+CREATE POLICY "Users can view own profile"
+ON public.profiles
+FOR SELECT
+USING (auth.uid() = id);
+
+-- Users can create their own profile
+CREATE POLICY "Users can insert own profile"
+ON public.profiles
+FOR INSERT
+WITH CHECK (auth.uid() = id);
+
+-- Users can update their own profile
+CREATE POLICY "Users can update own profile"
+ON public.profiles
+FOR UPDATE
+USING (auth.uid() = id)
+WITH CHECK (auth.uid() = id);

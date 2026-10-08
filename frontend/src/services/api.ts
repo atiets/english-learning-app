@@ -62,3 +62,36 @@ export const getFlashcardsByDeckId = async (deckID: string) => {
   }
   return res.json();
 };
+
+export interface SignUpUserInput {
+  email: string;
+  username: string;
+  password: string;
+}
+
+export interface SignUpResponse {
+  status: number;
+  data: any;
+}
+
+export const signUpUser = async (
+  data: SignUpUserInput
+): Promise<SignUpResponse> => {
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const parsedData = await res.json();
+
+  // if (!res.ok) {
+  //   throw new Error(json.message);
+  // }
+  // -> không throw khi !res.ok. Nó luôn trả về { status, data } để page có thể xử lý rõ từng error code (409, 422, v.v.).
+  return {
+    status: res.status,
+    data: parsedData,
+  };
+};

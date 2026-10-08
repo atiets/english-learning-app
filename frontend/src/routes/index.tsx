@@ -6,11 +6,14 @@ import CreateFlashcardPage from "../pages/Flashcards/CreateFlashcardPage";
 import EditFlashcardPage from "../pages/Flashcards/EditFlashcardPage";
 import MainLayout from "../components/layouts/MainLayout";
 import NotFoundPage from "../pages/NotFoundPage";
+import SignUpPage from "../pages/Authentication/SignUpPage";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/signup" element={<SignUpPage />} />
+
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
 
@@ -19,6 +22,7 @@ const AppRoutes = () => {
           <Route path="/flashcards/new" element={<CreateFlashcardPage />} />
 
           <Route path="/flashcards/edit/:id" element={<EditFlashcardPage />} />
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
