@@ -1,4 +1,4 @@
-import { supabase } from "../utils/supabase.js";
+import { supabase } from '../utils/supabase.js';
 
 export const createFlashcardService = async (data: any) => {
   const dbData = {
@@ -13,11 +13,11 @@ export const createFlashcardService = async (data: any) => {
     user_id: data.userId,
     deck_id: data.deckId,
     created_by: data.created_by,
-    updated_by: data.updated_by
+    updated_by: data.updated_by,
   };
 
   const { data: result, error } = await supabase
-    .from("flashcards")
+    .from('flashcards')
     .insert([dbData])
     .select();
 
@@ -27,46 +27,46 @@ export const createFlashcardService = async (data: any) => {
   return {
     ...result[0],
     userId: result[0].user_id,
-    deckId: result[0].deck_id
+    deckId: result[0].deck_id,
   };
 };
 
 export const getFlashcardsService = async () => {
   const { data, error } = await supabase
-    .from("flashcards")
-    .select("*")
-    .order("created_at", { ascending: false });
+    .from('flashcards')
+    .select('*')
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
 
   return data.map((item: any) => ({
     ...item,
     userId: item.user_id,
-    deckId: item.deck_id
+    deckId: item.deck_id,
   }));
 };
 
 export const getFlashcardsByDeckIdService = async (deckId: string) => {
   const { data, error } = await supabase
-    .from("flashcards")
-    .select("*")
-    .eq("deck_id", deckId)
-    .order("created_at", { ascending: false });
+    .from('flashcards')
+    .select('*')
+    .eq('deck_id', deckId)
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
 
   return data.map((item: any) => ({
     ...item,
     userId: item.user_id,
-    deckId: item.deck_id
+    deckId: item.deck_id,
   }));
 };
 
 export const getFlashcardByIdService = async (id: string) => {
   const { data, error } = await supabase
-    .from("flashcards")
-    .select("*")
-    .eq("id", id)
+    .from('flashcards')
+    .select('*')
+    .eq('id', id)
     .maybeSingle();
 
   if (error) throw error;
@@ -75,7 +75,7 @@ export const getFlashcardByIdService = async (id: string) => {
   return {
     ...data,
     userId: data.user_id,
-    deckId: data.deck_id
+    deckId: data.deck_id,
   };
 };
 
@@ -95,9 +95,9 @@ export const updateFlashcardService = async (id: string, data: any) => {
   if (data.updated_by !== undefined) dbData.updated_by = data.updated_by;
 
   const { data: result, error } = await supabase
-    .from("flashcards")
+    .from('flashcards')
     .update(dbData)
-    .eq("id", id)
+    .eq('id', id)
     .select();
 
   if (error) throw error;
@@ -106,15 +106,15 @@ export const updateFlashcardService = async (id: string, data: any) => {
   return {
     ...result[0],
     userId: result[0].user_id,
-    deckId: result[0].deck_id
+    deckId: result[0].deck_id,
   };
 };
 
 export const deleteFlashcardService = async (id: string) => {
   const { data, error } = await supabase
-    .from("flashcards")
+    .from('flashcards')
     .delete()
-    .eq("id", id)
+    .eq('id', id)
     .select();
 
   if (error) throw error;
@@ -124,25 +124,25 @@ export const deleteFlashcardService = async (id: string) => {
 
 export const getDueFlashcardsService = async () => {
   const { data, error } = await supabase
-    .from("flashcards")
-    .select("*")
-    .lte("next_review", new Date().toISOString())
-    .order("next_review", { ascending: true });
+    .from('flashcards')
+    .select('*')
+    .lte('next_review', new Date().toISOString())
+    .order('next_review', { ascending: true });
 
   if (error) throw error;
 
   return data.map((item: any) => ({
     ...item,
     userId: item.user_id,
-    deckId: item.deck_id
+    deckId: item.deck_id,
   }));
 };
 
 export const reviewFlashcardService = async (id: string, correct: boolean) => {
   const { data: currentCard, error: fetchError } = await supabase
-    .from("flashcards")
-    .select("box")
-    .eq("id", id)
+    .from('flashcards')
+    .select('box')
+    .eq('id', id)
     .maybeSingle();
 
   if (fetchError) throw fetchError;
@@ -162,7 +162,7 @@ export const reviewFlashcardService = async (id: string, correct: boolean) => {
     2: 2,
     3: 5,
     4: 9,
-    5: 14
+    5: 14,
   };
 
   const daysToAdd = boxIntervals[newBox] || 1;
@@ -170,13 +170,13 @@ export const reviewFlashcardService = async (id: string, correct: boolean) => {
   nextReviewDate.setDate(nextReviewDate.getDate() + daysToAdd);
 
   const { data: result, error: updateError } = await supabase
-    .from("flashcards")
+    .from('flashcards')
     .update({
       box: newBox,
       next_review: nextReviewDate.toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
-    .eq("id", id)
+    .eq('id', id)
     .select();
 
   if (updateError) throw updateError;
@@ -185,6 +185,6 @@ export const reviewFlashcardService = async (id: string, correct: boolean) => {
   return {
     ...result[0],
     userId: result[0].user_id,
-    deckId: result[0].deck_id
+    deckId: result[0].deck_id,
   };
 };
