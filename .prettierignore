@@ -1,6 +1,9 @@
-node_modules
-build
-dist
-coverage
-.next
+node_modules/
+build/
+dist/
+coverage/
+.next/
 .DS_Store
+package-lock.json
+.env
+.env.*
